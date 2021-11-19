@@ -58,7 +58,7 @@ namespace barkodOtomasyonSist
 
             {
 
-               
+
                 this.Hide();
                 Form1 f1 = new Form1();
                 f1.kulAdi = kullaniciAdTxt.Text;

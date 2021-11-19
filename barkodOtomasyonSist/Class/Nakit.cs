@@ -23,20 +23,24 @@ namespace barkodOtomasyonSist
                 double satisFiyati = urnServ.UrunAra(Convert.ToDouble(gelenBarkodlar[i])).SatisFiyati;
                 int kategoriNo = urnServ.UrunAra(Convert.ToDouble(gelenBarkodlar[i])).KategoriNo;
                 double alisFiyati = urnServ.UrunAra(Convert.ToDouble(gelenBarkodlar[i])).AlisFiyati;
+                int dbAdet = urnServ.UrunAra(gelenBarkodlar[i]).StokAdedi;
                 int adet = gelenAdet[i];
                 double sonuc = satisFiyati * adet;
                 DateTime satisZamani= DateTime.Now;
+
                 urnServ.satısKaydet(barkod,adı,adet,sonuc,satisFiyati,alisFiyati,kategoriNo,satisZamani);
-                int dbAdet = urnServ.UrunAra(barkod).StokAdedi;
+                int KDV= urnServ.getirKDV(kategoriNo);
+
+                
                 if (dbAdet-adet>=0)
                 {
                    
-                    new UrunService().urunAdetEksilt(dbAdet - adet, barkod);
+                    new UrunService().urunAdetEksilt((dbAdet - adet), barkod);
                     System.Windows.Forms.MessageBox.Show("urun satıldı ve adeti eksiltildi."+(dbAdet-adet).ToString());
                 }
                 else
                 {
-                    System.Windows.Forms.MessageBox.Show("Stokta Yeterli Satış İçin Ürün Kalmamıştır."  );
+                    System.Windows.Forms.MessageBox.Show("Stokta Satış İçin Yeterli Ürün Kalmamıştır.");
                 }
                 
 

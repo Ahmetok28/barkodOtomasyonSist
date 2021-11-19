@@ -28,14 +28,27 @@ namespace barkodOtomasyonSist
             
         }
 
+        public int getirKDV(int kategoriNo)
+        {
+            OleDbCommand komut = new OleDbCommand("SELECT * FROM Kategori WHERE Kategori_No=" + kategoriNo, ((new dbBaglanti()).baglantiKur()));
+            OleDbDataReader okunan = komut.ExecuteReader();
+            int KDV= 0;
+            while (okunan.Read())
+            {
+                KDV = Convert.ToInt32(okunan[2]);
+            }
+
+                return KDV;
+        }
+
         internal void UrunGuncelle(Urun urun)
         {
             new OleDbCommand("UPDATE Urun SET Alis_Fiyati='" + urun.AlisFiyati + "',Satis_Fiyati='" + urun.SatisFiyati + "'WHERE Barkod_No=" + urun.BarkodNo, new dbBaglanti().baglantiKur()).ExecuteNonQuery();
             bagla.baglantiyiKapat();
         }
-        internal void urunAdetEksilt(Urun urun)
+        internal void urunAdetEksilt(int gelenAdet,double gelenBarkod)
         {
-            new OleDbCommand("UPDATE Urun SET Stok_Adedi='" + urun.StokAdedi + "'WHERE Barkod_No=" + urun.BarkodNo, new dbBaglanti().baglantiKur()).ExecuteNonQuery();
+            new OleDbCommand("UPDATE Urun SET Stok_Adedi='" + gelenAdet + "'WHERE Barkod_No=" + gelenBarkod, new dbBaglanti().baglantiKur()).ExecuteNonQuery();
             bagla.baglantiyiKapat();
         }
         internal void urunSil(double p)

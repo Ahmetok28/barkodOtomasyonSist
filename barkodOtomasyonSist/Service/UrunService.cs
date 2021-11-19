@@ -27,10 +27,13 @@ namespace barkodOtomasyonSist
         {
             new urunDAO().UrunGuncelle(new Urun(p1, p2));
         }
-       
+        public int getirKDV(int katNo)
+        {
+            return new urunDAO().getirKDV(katNo);
+        }
         public void urunAdetEksilt(int g1,double g2)
         {
-            new urunDAO().urunAdetEksilt(new Urun(g1, g2));
+            new urunDAO().urunAdetEksilt(g1,g2);
         }
         public Urun UrunAra(double p)
         {

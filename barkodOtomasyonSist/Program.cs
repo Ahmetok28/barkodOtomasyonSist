@@ -16,7 +16,7 @@ namespace barkodOtomasyonSist
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new kullaniciGiris());
+            Application.Run(new Form1());
         }
     }
 }
