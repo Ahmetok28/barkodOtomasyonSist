@@ -29,7 +29,7 @@ namespace barkodOtomasyonSist
                 DateTime satisZamani= DateTime.Now;
 
                 urnServ.satısKaydet(barkod,adı,adet,sonuc,satisFiyati,alisFiyati,kategoriNo,satisZamani);
-                int KDV= urnServ.getirKDV(kategoriNo);
+                
 
                 
                 if (dbAdet-adet>=0)

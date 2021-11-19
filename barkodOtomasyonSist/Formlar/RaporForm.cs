@@ -24,11 +24,36 @@ namespace barkodOtomasyonSist
 
         }
 
-        void hesapla()
+        void hesaplaKDVli()
+        {
+
+            double sonuc = 0;
+            double toplamFiyat = 0;
+            double barkodNo = 0;
+            int kdv = 0;
+            int katNo;
+
+            int adet = 0;
+            for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+            {
+                toplamFiyat = Convert.ToDouble(dataGridView1.Rows[i].Cells[2].Value);
+                barkodNo = Convert.ToDouble(dataGridView1.Rows[i].Cells[0].Value);
+            katNo = new UrunService().UrunAra(barkodNo).KategoriNo;
+            kdv = new UrunService().getirKDV(katNo);
+
+            sonuc += toplamFiyat / (kdv / 100);
+        
+        }
+
+    }
+        
+
+void hesaplaKDVsiz()
         {
             double sonuc = 0;
             double toplamFiyat = 0;
             double alisfiyati = 0;
+            
             int adet = 0;
             for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
             {
@@ -44,7 +69,8 @@ namespace barkodOtomasyonSist
         private void button1_Click(object sender, EventArgs e)
         {
             dataGridDoldur();
-            hesapla();
+            hesaplaKDVsiz();
+            hesaplaKDVli();
             grafikCiz();
            
         }
@@ -71,37 +97,17 @@ namespace barkodOtomasyonSist
 
         void grafikCiz()
         {
-            List<double> barkodlar = new List<double>();
-            List<int> adetler = new List<int>();
-
-            
-            for (int i = 0; i < dataGridView1.Rows.Count-1; i++)
-            {
-                bool urunVarmi = barkodlar.Contains(Convert.ToDouble(dataGridView1.Rows[i].Cells[0].Value));
-                if (urunVarmi)
-                {
-                    int arananIndex = barkodlar.IndexOf(Convert.ToDouble(dataGridView1.Rows[i].Cells[0].Value));
-
-                    int oncekiUrunAdet =Convert.ToInt32( adetler[arananIndex]);
-                    int urunAdedi = Convert.ToInt32((dataGridView1.Rows[i].Cells[5].Value));
-                    adetler[arananIndex] = oncekiUrunAdet + urunAdedi;
-                   
-                   
-                }
-                else
-                {
-                    barkodlar.Add(Convert.ToDouble(dataGridView1.Rows[i].Cells[0].Value));
-                    adetler.Add(Convert.ToInt32(dataGridView1.Rows[i].Cells[5].Value));
-                }
-            }
+            List<double> barkodlar;
+            List<int> adetler;
+            barkodAdetlisteDoldur(out barkodlar, out adetler);
             double sonuc = 0;
-            for (int i = 0; i <adetler.Count; i++)
+            for (int i = 0; i < adetler.Count; i++)
             {
-                
-                if (i<6)
+
+                if (i < 6)
                 {
-                    chart1.Series["urunChart"].Points.AddXY((new UrunService().UrunAra(barkodlar[i]).UrunAd), adetler[i]*(new UrunService().UrunAra(barkodlar[i]).SatisFiyati));
-                   
+                    chart1.Series["urunChart"].Points.AddXY((new UrunService().UrunAra(barkodlar[i]).UrunAd), adetler[i] * (new UrunService().UrunAra(barkodlar[i]).SatisFiyati));
+
                 }
                 else if (i > 6)
                 {
@@ -111,6 +117,32 @@ namespace barkodOtomasyonSist
             }
             chart1.Series["urunChart"].Points.AddXY("Diğer", sonuc);
 
+        }
+
+        private void barkodAdetlisteDoldur(out List<double> barkodlar, out List<int> adetler)
+        {
+            barkodlar = new List<double>();
+            adetler = new List<int>();
+
+            for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+            {
+                bool urunVarmi = barkodlar.Contains(Convert.ToDouble(dataGridView1.Rows[i].Cells[0].Value));
+                if (urunVarmi)
+                {
+                    int arananIndex = barkodlar.IndexOf(Convert.ToDouble(dataGridView1.Rows[i].Cells[0].Value));
+
+                    int oncekiUrunAdet = Convert.ToInt32(adetler[arananIndex]);
+                    int urunAdedi = Convert.ToInt32((dataGridView1.Rows[i].Cells[5].Value));
+                    adetler[arananIndex] = oncekiUrunAdet + urunAdedi;
+
+
+                }
+                else
+                {
+                    barkodlar.Add(Convert.ToDouble(dataGridView1.Rows[i].Cells[0].Value));
+                    adetler.Add(Convert.ToInt32(dataGridView1.Rows[i].Cells[5].Value));
+                }
+            }
         }
     }
 }
