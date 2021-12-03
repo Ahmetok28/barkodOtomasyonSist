@@ -43,9 +43,10 @@ namespace barkodOtomasyonSist
 
             sonuc += toplamFiyat / (kdv / 100);
         
-        }
+            }
+            label5.Text = sonuc + "";
 
-    }
+        }
         
 
 void hesaplaKDVsiz()

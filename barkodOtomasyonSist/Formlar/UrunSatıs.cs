@@ -26,6 +26,68 @@ namespace barkodOtomasyonSist
         List<int> adetler = new List<int>();
         
 
+        private void butonOlustur()
+        {
+
+            int sayi1 = -1;
+            int sayi2 = 0;
+            bool flag = true;
+
+            for (int i = 0; i < 35; i++)
+            {
+                sayi1++;
+                sayi2 = 0;
+                flag = true;
+                for (int j = 1; j < 5; j++)
+                {
+                    sayi2++;
+                    int kontrolcu = ((i * 4) + j);
+
+                   
+                    if (kontrolcu % 28 == 0)
+                    {
+                        Button yeniButon = new Button();
+                        yeniButon.Text = kontrolcu.ToString();                        
+                        yeniButon.Location = new Point((sayi2 * 110) - 80, (sayi1 * 90) + 30);
+                        yeniButon.Width = 100;
+                        yeniButon.Height = 70;
+                        yeniButon.Click += NewButton_Click;
+                        tabControl1.SelectedTab.Controls.Add(yeniButon);
+                        ///////////////////////////////////////Yeni TabPage Ekleme///////////////////////////////////////////////////
+                        string title = "Borkodsuzlar " + (tabControl1.TabCount + 1).ToString();
+                        TabPage newTab = new TabPage(title);
+                        tabControl1.TabPages.Add(newTab);                                               
+                        tabControl1.SelectTab(newTab);
+                        //////////////////////////////////////Yeni TabPage Ekleme////////////////////////////////////////////////////
+                        sayi1 = -1;
+                        sayi2 = 0;
+                        flag = false;
+
+                    }
+
+                    if (flag)
+                    {
+                        Button yeniButon = new Button();
+                        
+                        yeniButon.Text = kontrolcu.ToString();
+/////////////////////////////////////////////this.Controls.Add(yeniButon);//////////////////////////////////////////
+                        yeniButon.Location = new Point((sayi2 * 110) - 80, (sayi1 * 90) + 30);
+                        yeniButon.Width = 100;
+                        yeniButon.Height = 70;
+                        yeniButon.Click += NewButton_Click;
+                        tabControl1.SelectedTab.Controls.Add(yeniButon);
+                    }                    
+                }                
+            }            
+        }
+
+        private void NewButton_Click(object sender, EventArgs e)
+        {
+            Button isimler = (Button)sender;
+            textBox2.Text += isimler.Text.ToString();
+
+        }
+
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -36,6 +98,9 @@ namespace barkodOtomasyonSist
         {
             timer1.Start();
             panel3.Visible = false;
+            butonOlustur();
+            tabControl1.SelectTab(tabPage1);
+            radioButton1.Checked = true;
 
         }
 
@@ -66,6 +131,10 @@ namespace barkodOtomasyonSist
        //Satış yap butonu
         private void button1_Click(object sender, EventArgs e)
         {
+            if (textBox1.TextLength ==13)
+            {
+
+            
             if (radioButton1.Checked||radioButton2.Checked||radioButton3.Checked)
             {
                 for (int i = 0; i < dataGridView1.Rows.Count; i++)
@@ -85,6 +154,14 @@ namespace barkodOtomasyonSist
                         adetler.Clear();
 
                     }
+                        else if (radioButton2.Checked)
+                        {
+                            MessageBox.Show("Bu özellik şu anda kullanılamıyor.");
+                        }
+                        else if (radioButton3.Checked)
+                        {
+                            MessageBox.Show("Bu özellik şu anda kullanılamıyor.");
+                        }
                 }
                 catch (Exception ee)
                 {
@@ -104,7 +181,11 @@ namespace barkodOtomasyonSist
             dataGridView1.Refresh();
             dataGridSırası--;
 
-
+            }
+            else
+            {
+                MessageBox.Show("Lütfen 13 haneli bir barkod numarasını giriniz.");
+            }
 
         }
         // Ürün dataGride Eklendiği yer
@@ -341,6 +422,11 @@ namespace barkodOtomasyonSist
         private void button12_Click(object sender, EventArgs e)
         {
             label4.Text += 0 + "";
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
