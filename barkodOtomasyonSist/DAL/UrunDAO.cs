@@ -27,6 +27,19 @@ namespace barkodOtomasyonSist
             return okunanUrunler;
             
         }
+        
+        internal ArrayList barkodsuzUrunOku()
+        {
+            ArrayList okunanUrunler = new ArrayList();
+            OleDbCommand komut = new OleDbCommand("SELECT * FROM  Barkodsuz", bagla.baglantiKur());
+            OleDbDataReader okunan = komut.ExecuteReader();
+            while (okunan.Read())
+            {
+                okunanUrunler.Add(new Barkodsuz(okunan[0].ToString(), okunan[1].ToString(),Convert.ToInt32(okunan[2]),Convert.ToInt32(okunan[3]),Convert.ToInt32(okunan[4]),Convert.ToDouble(okunan[5]),Convert.ToDouble(okunan[6]),Convert.ToDateTime(okunan[7]),Convert.ToInt32(okunan[8])));
+            }
+            bagla.baglantiyiKapat();
+            return okunanUrunler;
+        }
 
         public int getirKDV(int kategoriNo)
         {
@@ -88,6 +101,27 @@ namespace barkodOtomasyonSist
             bagla.baglantiyiKapat();
             return urn;
             
+        }
+        internal Barkodsuz barkodsuzUrunAra()
+        {
+            Barkodsuz bark= new Barkodsuz();
+            OleDbCommand komut = new OleDbCommand("SELECT * FROM Barkodsuz", bagla.baglantiKur());
+            OleDbDataReader okunan = komut.ExecuteReader();
+            while (okunan.Read())
+            {
+                bark.Urun_Ad = okunan[0].ToString();
+                bark.Urun_Acıklama = okunan[1].ToString();
+                bark.Kategori_No = Convert.ToInt32(okunan[2]);
+                bark.Uretici_No = Convert.ToInt32(okunan[3]);
+                bark.Stok_Adedi = Convert.ToInt32(okunan[4]);
+                bark.Alis_Fiyati = Convert.ToDouble(okunan[5]);
+                bark.Satis_Fiyati = Convert.ToDouble(okunan[6]);
+                bark.Alis_Tarihi = Convert.ToDateTime(okunan[7]);
+                bark.Urun_No = Convert.ToInt32(okunan[8]);
+            }
+            bagla.baglantiyiKapat();
+            return bark;
+
         }
         internal void satısKaydet(double Barkod,string Ad,int satilanAdet, double toplamFiyat, double satisFiyati, double alisFiyati,int kategori, DateTime satisZamani )
         {

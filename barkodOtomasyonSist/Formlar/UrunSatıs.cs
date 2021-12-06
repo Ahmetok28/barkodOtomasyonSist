@@ -21,19 +21,25 @@ namespace barkodOtomasyonSist
 
         UrunService urnServ = new UrunService();
         int dataGridSırası = 0;
-        int urunAdedi = 1;      
+        int urunAdedi = 1;
+        
+        
         List<double> barkodlar = new List<double>();
         List<int> adetler = new List<int>();
         
-
+       
+        
+        ////////////////////// Barkodsuz ürünleri TabControle ekleme //////////////////////////////// 
         private void butonOlustur()
         {
+            int sayi = urnServ.barkodsuzUrunOku().Count;
 
             int sayi1 = -1;
             int sayi2 = 0;
             bool flag = true;
+           
 
-            for (int i = 0; i < 35; i++)
+            for (int i = 0; i < sayi+1; i++)
             {
                 sayi1++;
                 sayi2 = 0;
@@ -47,7 +53,7 @@ namespace barkodOtomasyonSist
                     if (kontrolcu % 28 == 0)
                     {
                         Button yeniButon = new Button();
-                        yeniButon.Text = kontrolcu.ToString();                        
+                        yeniButon.Text = urnServ.barkodsuzUrunAra().Urun_Ad;                        
                         yeniButon.Location = new Point((sayi2 * 110) - 80, (sayi1 * 90) + 30);
                         yeniButon.Width = 100;
                         yeniButon.Height = 70;
@@ -69,8 +75,8 @@ namespace barkodOtomasyonSist
                     {
                         Button yeniButon = new Button();
                         
-                        yeniButon.Text = kontrolcu.ToString();
-/////////////////////////////////////////////this.Controls.Add(yeniButon);//////////////////////////////////////////
+                        yeniButon.Text = urnServ.barkodsuzUrunOku()[kontrolcu].ToString();
+                        /////////////////////////////////////////////this.Controls.Add(yeniButon);//////////////////////////////////////////
                         yeniButon.Location = new Point((sayi2 * 110) - 80, (sayi1 * 90) + 30);
                         yeniButon.Width = 100;
                         yeniButon.Height = 70;

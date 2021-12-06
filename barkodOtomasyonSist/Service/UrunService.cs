@@ -15,6 +15,14 @@ namespace barkodOtomasyonSist
         {
             return new urunDAO().urunOku();
         }
+        public Barkodsuz barkodsuzUrunAra()
+        {
+            return new urunDAO().barkodsuzUrunAra();
+        }
+        public ArrayList barkodsuzUrunOku()
+        {
+            return new urunDAO().barkodsuzUrunOku();
+        }
         public void urunKaydet(double v1, string v2, string v3, int v4, int v5, int v6, double v7, double v8, DateTime dateTime)
         {
             new urunDAO().urunKaydet(new Urun(v1, v2, v3, v4, v5, v6, v7, v8, dateTime));
