@@ -26,10 +26,12 @@ namespace barkodOtomasyonSist
         
         List<double> barkodlar = new List<double>();
         List<int> adetler = new List<int>();
+        ListBox liste = new ListBox();
+       
         
        
         
-        ////////////////////// Barkodsuz ürünleri TabControle ekleme //////////////////////////////// 
+        /////////////////////////////////////// Barkodsuz ürünleri TabControle ekleme /////////////////////////////////////////// 
         private void butonOlustur()
         {
             int sayi = urnServ.barkodsuzUrunOku().Count;
@@ -37,56 +39,72 @@ namespace barkodOtomasyonSist
             int sayi1 = -1;
             int sayi2 = 0;
             bool flag = true;
-           
-
-            for (int i = 0; i < sayi+1; i++)
+            ArrayList okunanUrunler = new UrunService().barkodsuzUrunOku();
+            liste.Items.Clear();
+            foreach (Barkodsuz b in okunanUrunler)
             {
-                sayi1++;
-                sayi2 = 0;
-                flag = true;
-                for (int j = 1; j < 5; j++)
+                
+                liste.Items.Add(b);
+            }
+
+            try
+            {
+                for (int i = 0; i < sayi - 1; i++)
                 {
-                    sayi2++;
-                    int kontrolcu = ((i * 4) + j);
-
-                   
-                    if (kontrolcu % 28 == 0)
+                    sayi1++;
+                    sayi2 = 0;
+                    flag = true;
+                    for (int j = 1; j < 5; j++)
                     {
-                        Button yeniButon = new Button();
-                        yeniButon.Text = urnServ.barkodsuzUrunAra().Urun_Ad;                        
-                        yeniButon.Location = new Point((sayi2 * 110) - 80, (sayi1 * 90) + 30);
-                        yeniButon.Width = 100;
-                        yeniButon.Height = 70;
-                        yeniButon.Click += NewButton_Click;
-                        tabControl1.SelectedTab.Controls.Add(yeniButon);
-                        ///////////////////////////////////////Yeni TabPage Ekleme///////////////////////////////////////////////////
-                        string title = "Borkodsuzlar " + (tabControl1.TabCount + 1).ToString();
-                        TabPage newTab = new TabPage(title);
-                        tabControl1.TabPages.Add(newTab);                                               
-                        tabControl1.SelectTab(newTab);
-                        //////////////////////////////////////Yeni TabPage Ekleme////////////////////////////////////////////////////
-                        sayi1 = -1;
-                        sayi2 = 0;
-                        flag = false;
+                        sayi2++;
+                        int kontrolcu = ((i * 4) + j);
 
+
+                        if (kontrolcu % 28 == 0)
+                        {
+                            Button yeniButon = new Button();
+                            yeniButon.Text = liste.Items[kontrolcu - 1].ToString();
+                            yeniButon.Location = new Point((sayi2 * 110) - 80, (sayi1 * 90) + 30);
+                            yeniButon.Width = 100;
+                            yeniButon.Height = 70;
+                            yeniButon.Click += NewButton_Click;
+                            tabControl1.SelectedTab.Controls.Add(yeniButon);
+                            ///////////////////////////////////////Yeni TabPage Ekleme///////////////////////////////////////////////////
+                            string title = "Borkodsuzlar " + (tabControl1.TabCount + 1).ToString();
+                            TabPage newTab = new TabPage(title);
+                            tabControl1.TabPages.Add(newTab);
+                            tabControl1.SelectTab(newTab);
+                            //////////////////////////////////////Yeni TabPage Ekleme////////////////////////////////////////////////////
+                            sayi1 = -1;
+                            sayi2 = 0;
+                            flag = false;
+
+                        }
+
+                        if (flag)
+                        {
+                           
+                            Button yeniButon = new Button();
+
+                            yeniButon.Text = liste.Items[kontrolcu - 1].ToString();
+                            /////////////////////////////////////////////this.Controls.Add(yeniButon);//////////////////////////////////////////
+                            yeniButon.Location = new Point((sayi2 * 110) - 80, (sayi1 * 90) + 30);
+                            yeniButon.Width = 100;
+                            yeniButon.Height = 70;
+                            yeniButon.Click += NewButton_Click;
+                            tabControl1.SelectedTab.Controls.Add(yeniButon);
+                        }
                     }
+                }
+            }
+            catch (Exception)
+            {
 
-                    if (flag)
-                    {
-                        Button yeniButon = new Button();
-                        
-                        yeniButon.Text = urnServ.barkodsuzUrunOku()[kontrolcu].ToString();
-                        /////////////////////////////////////////////this.Controls.Add(yeniButon);//////////////////////////////////////////
-                        yeniButon.Location = new Point((sayi2 * 110) - 80, (sayi1 * 90) + 30);
-                        yeniButon.Width = 100;
-                        yeniButon.Height = 70;
-                        yeniButon.Click += NewButton_Click;
-                        tabControl1.SelectedTab.Controls.Add(yeniButon);
-                    }                    
-                }                
-            }            
+               
+            }
+                      
         }
-
+        //////////////////////////////////Dinamik butonların tıklamasını Yakalayan kod////////////////////////////////////////////
         private void NewButton_Click(object sender, EventArgs e)
         {
             Button isimler = (Button)sender;
@@ -134,7 +152,7 @@ namespace barkodOtomasyonSist
             label3.Text = lblDeger.ToString();
             
         }
-       //Satış yap butonu
+       /////////////////////////////////////Satış yap butonu///////////////////////////////////////////////////////////////////////
         private void button1_Click(object sender, EventArgs e)
         {
             if (textBox1.TextLength ==13)
@@ -194,7 +212,7 @@ namespace barkodOtomasyonSist
             }
 
         }
-        // Ürün dataGride Eklendiği yer
+        /////////////////////////////////////////////// Ürün dataGride Eklendiği yer///////////////////////////////////////////////
         private void textBox1_TextChanged(object sender, EventArgs e)
         {            
             try
@@ -247,7 +265,7 @@ namespace barkodOtomasyonSist
         }
 
        
-        // Adet onay butonu
+        //////////////////////////////////////// Adet onay butonu/////////////////////////////////////////////////////////////////
         private void button14_Click(object sender, EventArgs e)
         {
             try
@@ -278,7 +296,7 @@ namespace barkodOtomasyonSist
         }
 
        
-        //Seçili olan ürünün adedini eksiltme butonu
+        /////////////////////////////////////Seçili olan ürünün adedini eksiltme butonu///////////////////////////////////////////
         private void button15_Click(object sender, EventArgs e)
         {
             try
@@ -316,7 +334,7 @@ namespace barkodOtomasyonSist
 
 
         }
-        //Seçili olan ürünü dataGridden silme ve fiyatı düşürme butonu
+        ///////////////////////////////////Seçili olan ürünü dataGridden silme ve fiyatı düşürme butonu///////////////////////////
         private void button16_Click_1(object sender, EventArgs e)
         {
             try
@@ -351,7 +369,7 @@ namespace barkodOtomasyonSist
                 MessageBox.Show("Tüm satırın seçili olduğundan emin olun", "Bir Şeyler Yanlış Gitti", MessageBoxButtons.OK, MessageBoxIcon.Error); ;
             }
         }
-        //adet sil butonu
+        /////////////////////////////////////adet sil butonu//////////////////////////////////////////////////////////////////////
         private void button13_Click(object sender, EventArgs e)
         {
             label4.Text = "";
