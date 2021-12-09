@@ -15,9 +15,9 @@ namespace barkodOtomasyonSist
         {
             return new urunDAO().urunOku();
         }
-        public Barkodsuz barkodsuzUrunAra()
+        public Urun barkodsuzUrunAra(string ad,string aciklama)
         {
-            return new urunDAO().barkodsuzUrunAra();
+            return new urunDAO().barkodsuzUrunAra(ad,aciklama);
         }
         public ArrayList barkodsuzUrunOku()
         {

@@ -77,6 +77,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -490,6 +491,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.label6);
             this.groupBox5.Controls.Add(this.tabControl1);
             this.groupBox5.Controls.Add(this.button2);
             this.groupBox5.Controls.Add(this.textBox2);
@@ -586,6 +588,15 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(59, 77);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(54, 18);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "label6";
+            // 
             // UrunSatıs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -670,5 +681,6 @@
         private System.Windows.Forms.Button button17;
         private System.Windows.Forms.Button button18;
         public System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label6;
     }
 }

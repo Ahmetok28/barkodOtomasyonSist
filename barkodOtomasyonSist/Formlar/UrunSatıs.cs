@@ -26,6 +26,7 @@ namespace barkodOtomasyonSist
         
         List<double> barkodlar = new List<double>();
         List<int> adetler = new List<int>();
+        List<string> urunAd = new List<string>();
         ListBox liste = new ListBox();
        
         
@@ -41,7 +42,7 @@ namespace barkodOtomasyonSist
             bool flag = true;
             ArrayList okunanUrunler = new UrunService().barkodsuzUrunOku();
             liste.Items.Clear();
-            foreach (Barkodsuz b in okunanUrunler)
+            foreach (Urun b in okunanUrunler)
             {
                 
                 liste.Items.Add(b);
@@ -107,8 +108,10 @@ namespace barkodOtomasyonSist
         //////////////////////////////////Dinamik butonların tıklamasını Yakalayan kod////////////////////////////////////////////
         private void NewButton_Click(object sender, EventArgs e)
         {
+            label6.Text = "";
             Button isimler = (Button)sender;
-            textBox2.Text += isimler.Text.ToString();
+            label6.Text += isimler.Text.ToString();
+            urunSat(1, label6.Text.ToString());
 
         }
 
@@ -134,14 +137,28 @@ namespace barkodOtomasyonSist
 
         }
    
-        public void urunSat()
+        public void urunSat(int kontrol, string ad)
         {
-            dataGridView1.Rows.Add();
-            dataGridView1.Rows[dataGridSırası].Cells[0].Value = urnServ.UrunAra(Convert.ToDouble(textBox1.Text)).BarkodNo;           
-            dataGridView1.Rows[dataGridSırası].Cells[1].Value = urnServ.UrunAra(Convert.ToDouble(textBox1.Text)).UrunAd.ToString();
-            dataGridView1.Rows[dataGridSırası].Cells[2].Value = urnServ.UrunAra(Convert.ToDouble(textBox1.Text)).UrunAciklam.ToString();
-            dataGridView1.Rows[dataGridSırası].Cells[3].Value = urnServ.UrunAra(Convert.ToDouble(textBox1.Text)).SatisFiyati;
-            dataGridView1.Rows[dataGridSırası].Cells[4].Value = 1;
+            if (kontrol==0)
+            {
+                dataGridView1.Rows.Add();
+                dataGridView1.Rows[dataGridSırası].Cells[0].Value = urnServ.UrunAra(Convert.ToDouble(textBox1.Text)).BarkodNo;
+                dataGridView1.Rows[dataGridSırası].Cells[1].Value = urnServ.UrunAra(Convert.ToDouble(textBox1.Text)).UrunAd.ToString();
+                dataGridView1.Rows[dataGridSırası].Cells[2].Value = urnServ.UrunAra(Convert.ToDouble(textBox1.Text)).UrunAciklam.ToString();
+                dataGridView1.Rows[dataGridSırası].Cells[3].Value = urnServ.UrunAra(Convert.ToDouble(textBox1.Text)).SatisFiyati;
+                dataGridView1.Rows[dataGridSırası].Cells[4].Value = 1;
+            }
+            else
+            {
+                string[] gelenler = ad.Split('\n');
+
+                dataGridView1.Rows.Add();              
+                dataGridView1.Rows[dataGridSırası].Cells[1].Value = urnServ.barkodsuzUrunAra(gelenler[0],gelenler[1]).UrunAd.ToString();
+                dataGridView1.Rows[dataGridSırası].Cells[2].Value = urnServ.barkodsuzUrunAra(gelenler[0], gelenler[1]).UrunAciklam.ToString();
+                dataGridView1.Rows[dataGridSırası].Cells[3].Value = urnServ.barkodsuzUrunAra(gelenler[0], gelenler[1]).SatisFiyati;
+                dataGridView1.Rows[dataGridSırası].Cells[4].Value = 1;
+            }
+           
         }
         public void labeleYazdir()
         {
@@ -241,7 +258,7 @@ namespace barkodOtomasyonSist
                     //Ürün DataGridView'e ekli değil ise ürünü dataGride ekler.
                     else
                     {
-                        urunSat();
+                        urunSat(0,"");
 
                         barkodlar.Add(urnServ.UrunAra(Convert.ToDouble(textBox1.Text)).BarkodNo);
                         dataGridSırası++;

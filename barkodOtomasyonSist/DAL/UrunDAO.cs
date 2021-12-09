@@ -12,8 +12,8 @@ namespace barkodOtomasyonSist
     {
         dbBaglanti bagla = new dbBaglanti();
 
-       
-        
+
+
         internal ArrayList urunOku()
         {
             ArrayList okunanUrunler = new ArrayList();
@@ -25,9 +25,9 @@ namespace barkodOtomasyonSist
             }
             bagla.baglantiyiKapat();
             return okunanUrunler;
-            
+
         }
-        
+
         internal ArrayList barkodsuzUrunOku()
         {
             ArrayList okunanUrunler = new ArrayList();
@@ -35,7 +35,7 @@ namespace barkodOtomasyonSist
             OleDbDataReader okunan = komut.ExecuteReader();
             while (okunan.Read())
             {
-                okunanUrunler.Add(new Barkodsuz(okunan[0].ToString(), okunan[1].ToString(),Convert.ToInt32(okunan[2]),Convert.ToInt32(okunan[3]),Convert.ToInt32(okunan[4]),Convert.ToDouble(okunan[5]),Convert.ToDouble(okunan[6]),Convert.ToDateTime(okunan[7]),Convert.ToInt32(okunan[8])));
+                okunanUrunler.Add(new Urun(okunan[0].ToString(), okunan[1].ToString(), Convert.ToInt32(okunan[2]), Convert.ToInt32(okunan[3]), Convert.ToInt32(okunan[4]), Convert.ToDouble(okunan[5]), Convert.ToDouble(okunan[6]), Convert.ToDateTime(okunan[7]), Convert.ToInt32(okunan[8])));
             }
             bagla.baglantiyiKapat();
             return okunanUrunler;
@@ -45,13 +45,13 @@ namespace barkodOtomasyonSist
         {
             OleDbCommand komut = new OleDbCommand("SELECT * FROM Kategori WHERE Kategori_No=" + kategoriNo, ((new dbBaglanti()).baglantiKur()));
             OleDbDataReader okunan = komut.ExecuteReader();
-            int KDV= 0;
+            int KDV = 0;
             while (okunan.Read())
             {
                 KDV = Convert.ToInt32(okunan[2]);
             }
 
-                return KDV;
+            return KDV;
         }
 
         internal void UrunGuncelle(Urun urun)
@@ -59,7 +59,7 @@ namespace barkodOtomasyonSist
             new OleDbCommand("UPDATE Urun SET Alis_Fiyati='" + urun.AlisFiyati + "',Satis_Fiyati='" + urun.SatisFiyati + "'WHERE Barkod_No=" + urun.BarkodNo, new dbBaglanti().baglantiKur()).ExecuteNonQuery();
             bagla.baglantiyiKapat();
         }
-        internal void urunAdetEksilt(int gelenAdet,double gelenBarkod)
+        internal void urunAdetEksilt(int gelenAdet, double gelenBarkod)
         {
             new OleDbCommand("UPDATE Urun SET Stok_Adedi='" + gelenAdet + "'WHERE Barkod_No=" + gelenBarkod, new dbBaglanti().baglantiKur()).ExecuteNonQuery();
             bagla.baglantiyiKapat();
@@ -72,11 +72,11 @@ namespace barkodOtomasyonSist
 
         internal void urunKaydet(Urun urun)
         {
-           OleDbCommand komut = new OleDbCommand("INSERT INTO Urun (Barkod_No,Urun_Ad,Urun_Aciklama,Kategori_No,Uretici_No,Stok_Adedi,Alis_Fiyati,Satis_Fiyati,Alis_Tarihi) values ('" + urun.BarkodNo + "','" + urun.UrunAd + "','" + urun.UrunAciklam + "','" + urun.KategoriNo + "','" + urun.UreticiNo + "','" + urun.StokAdedi + "','" + urun.AlisFiyati + "','" + urun.SatisFiyati + "','" + urun.AlisZamani + "') ",bagla.baglantiKur());
+            OleDbCommand komut = new OleDbCommand("INSERT INTO Urun (Barkod_No,Urun_Ad,Urun_Aciklama,Kategori_No,Uretici_No,Stok_Adedi,Alis_Fiyati,Satis_Fiyati,Alis_Tarihi) values ('" + urun.BarkodNo + "','" + urun.UrunAd + "','" + urun.UrunAciklam + "','" + urun.KategoriNo + "','" + urun.UreticiNo + "','" + urun.StokAdedi + "','" + urun.AlisFiyati + "','" + urun.SatisFiyati + "','" + urun.AlisZamani + "') ", bagla.baglantiKur());
             komut.ExecuteNonQuery();
             bagla.baglantiyiKapat();
         }
-        
+
         public Urun urunAra(double p)
         {
 
@@ -100,35 +100,48 @@ namespace barkodOtomasyonSist
             }
             bagla.baglantiyiKapat();
             return urn;
-            
+
         }
-        internal Barkodsuz barkodsuzUrunAra()
+        internal Urun barkodsuzUrunAra(string ad, string aciklama)
         {
-            Barkodsuz bark= new Barkodsuz();
-            OleDbCommand komut = new OleDbCommand("SELECT * FROM Barkodsuz", bagla.baglantiKur());
-            OleDbDataReader okunan = komut.ExecuteReader();
-            while (okunan.Read())
+            Urun bark = new Urun();
+            try
             {
-                bark.Urun_Ad = okunan[0].ToString();
-                bark.Urun_Acıklama = okunan[1].ToString();
-                bark.Kategori_No = Convert.ToInt32(okunan[2]);
-                bark.Uretici_No = Convert.ToInt32(okunan[3]);
-                bark.Stok_Adedi = Convert.ToInt32(okunan[4]);
-                bark.Alis_Fiyati = Convert.ToDouble(okunan[5]);
-                bark.Satis_Fiyati = Convert.ToDouble(okunan[6]);
-                bark.Alis_Tarihi = Convert.ToDateTime(okunan[7]);
-                bark.Urun_No = Convert.ToInt32(okunan[8]);
+               
+                OleDbCommand komut = new OleDbCommand("SELECT * FROM Barkodsuz WHERE Urun_Ad='" + ad + "' AND_Acıklama='" + aciklama + "'", bagla.baglantiKur());
+                OleDbDataReader okunan = komut.ExecuteReader();
+                while (okunan.Read())
+                {
+                    bark.UrunAd = okunan[0].ToString();
+                    bark.UrunAciklam = okunan[1].ToString();
+                    bark.KategoriNo = Convert.ToInt32(okunan[2]);
+                    bark.UreticiNo = Convert.ToInt32(okunan[3]);
+                    bark.StokAdedi = Convert.ToInt32(okunan[4]);
+                    bark.AlisFiyati = Convert.ToDouble(okunan[5]);
+                    bark.SatisFiyati = Convert.ToDouble(okunan[6]);
+                    bark.AlisZamani = Convert.ToDateTime(okunan[7]);
+                    bark.Urun_No = Convert.ToInt32(okunan[8]);
+
+
+
+                }
+                bagla.baglantiyiKapat();
+               
             }
-            bagla.baglantiyiKapat();
+            catch (Exception)
+            {
+
+                System.Windows.Forms.MessageBox.Show("Test");;
+            }
+
             return bark;
 
         }
-        internal void satısKaydet(double Barkod,string Ad,int satilanAdet, double toplamFiyat, double satisFiyati, double alisFiyati,int kategori, DateTime satisZamani )
+        internal void satısKaydet(double Barkod, string Ad, int satilanAdet, double toplamFiyat, double satisFiyati, double alisFiyati, int kategori, DateTime satisZamani)
         {
-            new OleDbCommand("insert into Satislar (BarkodNo,UrunAd,SatilanAdet,ToplamFiyat,SatisFiyati,AlisFiyati,Kategori,SatisTarihi) values ('" +Barkod+ "','" +Ad+ "','"+satilanAdet+ "','" + toplamFiyat + "','" + satisFiyati+ "','"+alisFiyati+ "','"+kategori+ "','"+satisZamani+"') ", new dbBaglanti().baglantiKur()).ExecuteNonQuery();
+            new OleDbCommand("insert into Satislar (BarkodNo,UrunAd,SatilanAdet,ToplamFiyat,SatisFiyati,AlisFiyati,Kategori,SatisTarihi) values ('" + Barkod + "','" + Ad + "','" + satilanAdet + "','" + toplamFiyat + "','" + satisFiyati + "','" + alisFiyati + "','" + kategori + "','" + satisZamani + "') ", new dbBaglanti().baglantiKur()).ExecuteNonQuery();
             bagla.baglantiyiKapat();
         }
-        
-
     }
+
 }
