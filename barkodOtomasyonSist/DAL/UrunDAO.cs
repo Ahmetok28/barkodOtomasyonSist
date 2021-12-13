@@ -108,7 +108,7 @@ namespace barkodOtomasyonSist
             try
             {
                
-                OleDbCommand komut = new OleDbCommand("SELECT * FROM Barkodsuz WHERE Urun_Ad='" + ad + "' AND_Acıklama='" + aciklama + "'", bagla.baglantiKur());
+                OleDbCommand komut = new OleDbCommand("SELECT * FROM Barkodsuz WHERE Urun_Ad='" + ad + "' AND Urun_Acıklama='" + aciklama + "'", bagla.baglantiKur());
                 OleDbDataReader okunan = komut.ExecuteReader();
                 while (okunan.Read())
                 {

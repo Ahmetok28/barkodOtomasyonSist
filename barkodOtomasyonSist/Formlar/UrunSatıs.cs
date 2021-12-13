@@ -25,8 +25,10 @@ namespace barkodOtomasyonSist
         
         
         List<double> barkodlar = new List<double>();
+
         List<int> adetler = new List<int>();
         List<string> urunAd = new List<string>();
+        List<string> urunAciklama = new List<string>();
         ListBox liste = new ListBox();
        
         
@@ -111,7 +113,39 @@ namespace barkodOtomasyonSist
             label6.Text = "";
             Button isimler = (Button)sender;
             label6.Text += isimler.Text.ToString();
-            urunSat(1, label6.Text.ToString());
+            string[] urunAdVeAciklama = label6.Text.Split('\n');
+            bool urunAdiVarmi = urunAd.Contains(urunAdVeAciklama[0]);
+            bool urunAciklamaVarmi = urunAciklama.Contains(urunAdVeAciklama[1]);
+            if (urunAdiVarmi==true && urunAciklamaVarmi==true)
+            {
+                int arananAdIndex = urunAd.IndexOf(urunAdVeAciklama[0]);
+                int arananAciklamaIndex = urunAciklama.IndexOf(urunAdVeAciklama[1]);
+
+                urunAdedi = Convert.ToInt32((dataGridView1.Rows[arananAciklamaIndex].Cells[4].Value));
+                urunAdedi++;
+                double fiyat = Convert.ToDouble(dataGridView1.Rows[arananAciklamaIndex].Cells[3].Value);
+                double labelDegeri = Convert.ToDouble(label3.Text);
+                double sonuc = 0;
+                sonuc += fiyat;
+                labelDegeri = labelDegeri + sonuc;
+                label3.Text = labelDegeri + "";
+
+                dataGridView1.Rows[arananAciklamaIndex].Cells[4].Value = urunAdedi;
+                urunAdedi = 1;
+
+            }
+            //Ürün DataGridView'e ekli değil ise ürünü dataGride ekler.
+            else
+            {
+
+                urunSat(1, label6.Text.ToString());
+                urunAd.Add(urunAdVeAciklama[0]);
+                urunAciklama.Add(urunAdVeAciklama[1]);
+                dataGridSırası++;
+                labeleYazdir();
+
+            }
+           
 
         }
 
@@ -152,7 +186,8 @@ namespace barkodOtomasyonSist
             {
                 string[] gelenler = ad.Split('\n');
 
-                dataGridView1.Rows.Add();              
+                dataGridView1.Rows.Add();
+                //dataGridView1.Rows[dataGridSırası].Cells[1].Value = "-";
                 dataGridView1.Rows[dataGridSırası].Cells[1].Value = urnServ.barkodsuzUrunAra(gelenler[0],gelenler[1]).UrunAd.ToString();
                 dataGridView1.Rows[dataGridSırası].Cells[2].Value = urnServ.barkodsuzUrunAra(gelenler[0], gelenler[1]).UrunAciklam.ToString();
                 dataGridView1.Rows[dataGridSırası].Cells[3].Value = urnServ.barkodsuzUrunAra(gelenler[0], gelenler[1]).SatisFiyati;
